@@ -2,16 +2,18 @@ use chacha20poly1305::aead::Aead;
 use chacha20poly1305::{aead, ChaCha20Poly1305};
 use hex::{FromHex, FromHexError};
 
+const NONCE_SIZE: usize = 12;
+
 #[derive(Debug)]
 pub struct EncryptedLine(Vec<u8>);
 
 impl EncryptedLine {
     pub fn nonce(&self) -> &[u8] {
-        &self.0[0..12]
+        &self.0[0..NONCE_SIZE]
     }
 
     pub fn ciphertext(&self) -> &[u8] {
-        &self.0[12..]
+        &self.0[NONCE_SIZE..]
     }
 
     pub fn decrypt(&self, cipher: &ChaCha20Poly1305) -> aead::Result<Vec<u8>> {
