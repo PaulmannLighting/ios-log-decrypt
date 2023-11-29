@@ -1,23 +1,23 @@
-mod encrypted_line;
+mod block;
 
+use block::Block;
 use chacha20poly1305::{aead, ChaCha20Poly1305, KeyInit};
-use encrypted_line::EncryptedLine;
 use hex::FromHex;
 use std::iter::FilterMap;
 use std::str::SplitWhitespace;
 
 pub struct ChaChaHexStream<'a> {
-    lines: FilterMap<SplitWhitespace<'a>, fn(&str) -> Option<EncryptedLine>>,
+    blocks: FilterMap<SplitWhitespace<'a>, fn(&str) -> Option<Block>>,
     cipher: ChaCha20Poly1305,
 }
 
 impl<'a> ChaChaHexStream<'a> {
     #[must_use]
-    pub fn new(lines: &'a str, key: &[u8]) -> Self {
+    pub fn new(blocks: &'a str, key: &[u8]) -> Self {
         Self {
-            lines: lines
+            blocks: blocks
                 .split_whitespace()
-                .filter_map(|line| EncryptedLine::from_hex(line).ok()),
+                .filter_map(|block| Block::from_hex(block).ok()),
             cipher: ChaCha20Poly1305::new(key.into()),
         }
     }
@@ -27,6 +27,6 @@ impl<'a> Iterator for ChaChaHexStream<'a> {
     type Item = aead::Result<Vec<u8>>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.lines.next().map(|line| line.decrypt(&self.cipher))
+        self.blocks.next().map(|line| line.decrypt(&self.cipher))
     }
 }

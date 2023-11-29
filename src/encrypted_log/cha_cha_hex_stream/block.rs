@@ -5,9 +5,9 @@ use hex::{FromHex, FromHexError};
 const NONCE_SIZE: usize = 12;
 
 #[derive(Debug)]
-pub struct EncryptedLine(Vec<u8>);
+pub struct Block(Vec<u8>);
 
-impl EncryptedLine {
+impl Block {
     pub fn nonce(&self) -> &[u8] {
         &self.0[0..NONCE_SIZE]
     }
@@ -21,7 +21,7 @@ impl EncryptedLine {
     }
 }
 
-impl FromHex for EncryptedLine {
+impl FromHex for Block {
     type Error = FromHexError;
 
     fn from_hex<T>(hex: T) -> Result<Self, Self::Error>
