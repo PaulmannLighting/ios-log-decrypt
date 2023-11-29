@@ -27,8 +27,7 @@ fn main() {
         exit(2);
     });
 
-    for (index, block) in encrypted_log.decrypt(&key).enumerate() {
-        info!("Block # {index}");
+    for block in encrypted_log.decrypt(&key) {
         match block {
             Ok(ref bytes) => stdout().write_all(bytes).expect("could not write bytes"),
             Err(error) => error!("{error}"),
