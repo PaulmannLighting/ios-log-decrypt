@@ -9,8 +9,8 @@ pub struct EncryptedLog(String);
 impl EncryptedLog {
     /// Create a new encrypted log file from a header and ciphertext.
     #[must_use]
-    pub const fn new(lines: String) -> Self {
-        Self(lines)
+    pub const fn new(blocks: String) -> Self {
+        Self(blocks)
     }
 
     /// Decrypt the ciphertext.
