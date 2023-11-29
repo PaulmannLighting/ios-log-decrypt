@@ -1,6 +1,6 @@
 use clap::Parser;
 use ios_log_decrypt::EncryptedLog;
-use log::{error, info};
+use log::error;
 use std::fs::read_to_string;
 use std::io::{stdout, Write};
 use std::path::PathBuf;
