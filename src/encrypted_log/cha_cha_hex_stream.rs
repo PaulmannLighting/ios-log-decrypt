@@ -3,6 +3,7 @@ mod block;
 use block::Block;
 use chacha20poly1305::{aead, ChaCha20Poly1305, KeyInit};
 use hex::FromHex;
+use log::error;
 use std::iter::FilterMap;
 use std::str::SplitWhitespace;
 
@@ -17,7 +18,13 @@ impl<'a> ChaChaHexStream<'a> {
         Self {
             blocks: blocks
                 .split_whitespace()
-                .filter_map(|block| Block::from_hex(block).ok()),
+                .filter_map(|block| match Block::from_hex(block) {
+                    Ok(block) => Some(block),
+                    Err(error) => {
+                        error!("{error}");
+                        None
+                    }
+                }),
             cipher: ChaCha20Poly1305::new(key.into()),
         }
     }
