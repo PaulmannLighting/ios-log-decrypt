@@ -27,6 +27,6 @@ impl<'a> Iterator for ChaChaHexStream<'a> {
     type Item = aead::Result<Vec<u8>>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.blocks.next().map(|line| line.decrypt(&self.cipher))
+        self.blocks.next().map(|block| block.decrypt(&self.cipher))
     }
 }
