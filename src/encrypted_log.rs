@@ -16,6 +16,6 @@ impl EncryptedLog {
     /// Decrypt the ciphertext.
     #[must_use]
     pub fn decrypt(&self, key: &[u8]) -> ChaChaHexStream {
-        ChaChaHexStream::new(self.0.as_str(), key)
+        ChaChaHexStream::new(&self.0, key)
     }
 }
