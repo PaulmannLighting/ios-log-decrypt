@@ -5,7 +5,7 @@ use hex::{FromHex, FromHexError};
 const NONCE_SIZE: usize = 12;
 
 #[derive(Debug)]
-pub struct Block(Vec<u8>);
+pub struct Block(Box<[u8]>);
 
 impl Block {
     pub fn nonce(&self) -> &[u8] {
@@ -28,6 +28,6 @@ impl FromHex for Block {
     where
         T: AsRef<[u8]>,
     {
-        Vec::<u8>::from_hex(hex).map(Self)
+        Vec::<u8>::from_hex(hex).map(|bytes| Self(bytes.into_boxed_slice()))
     }
 }
