@@ -7,7 +7,7 @@ use cha_cha_hex_stream::ChaChaHexStream;
 pub struct EncryptedLog(String);
 
 impl EncryptedLog {
-    /// Create a new encrypted log file from a header and ciphertext.
+    /// Create a new encrypted log file from whitespace-separated blocks of hex strings.
     #[must_use]
     pub const fn new(blocks: String) -> Self {
         Self(blocks)
