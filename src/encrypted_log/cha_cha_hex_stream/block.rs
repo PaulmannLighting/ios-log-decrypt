@@ -28,6 +28,8 @@ impl FromHex for Block {
     where
         T: AsRef<[u8]>,
     {
-        Vec::<u8>::from_hex(hex).map(|bytes| Self(bytes.into_boxed_slice()))
+        Vec::<u8>::from_hex(hex)
+            .map(Vec::into_boxed_slice)
+            .map(Self)
     }
 }
