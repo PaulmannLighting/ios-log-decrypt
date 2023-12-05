@@ -29,8 +29,6 @@ impl<'a> Iterator for ChaChaHexStream<'a> {
     type Item = anyhow::Result<Vec<u8>>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.blocks
-            .next()
-            .map(|block| Ok(block?.decrypt(&self.cipher)?))
+        self.blocks.next().map(|block| block?.decrypt(&self.cipher))
     }
 }
