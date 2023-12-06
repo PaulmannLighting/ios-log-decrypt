@@ -1,6 +1,7 @@
 mod cha_cha_hex_stream;
 
 use cha_cha_hex_stream::ChaChaHexStream;
+use chacha20poly1305::Key;
 
 /// An encrypted log file.
 #[derive(Debug, Eq, PartialEq)]
@@ -15,7 +16,7 @@ impl EncryptedLog {
 
     /// Decrypt the ciphertext.
     #[must_use]
-    pub fn decrypt(&self, key: &[u8]) -> ChaChaHexStream {
+    pub fn decrypt(&self, key: &Key) -> ChaChaHexStream {
         ChaChaHexStream::new(&self.0, key)
     }
 }

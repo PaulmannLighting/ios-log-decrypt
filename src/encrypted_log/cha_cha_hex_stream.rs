@@ -1,7 +1,7 @@
 mod block;
 
 use block::Block;
-use chacha20poly1305::{ChaCha20Poly1305, KeyInit};
+use chacha20poly1305::{ChaCha20Poly1305, Key, KeyInit};
 use hex::{FromHex, FromHexError};
 use std::iter::Map;
 use std::str::SplitWhitespace;
@@ -15,12 +15,12 @@ pub struct ChaChaHexStream<'a> {
 
 impl<'a> ChaChaHexStream<'a> {
     #[must_use]
-    pub fn new(blocks: &'a str, key: &[u8]) -> Self {
+    pub fn new(blocks: &'a str, key: &Key) -> Self {
         Self {
             blocks: blocks
                 .split_whitespace()
                 .map(|block| Block::from_hex(block)),
-            cipher: ChaCha20Poly1305::new(key.into()),
+            cipher: ChaCha20Poly1305::new(key),
         }
     }
 }
