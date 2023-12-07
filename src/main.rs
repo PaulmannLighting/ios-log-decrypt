@@ -15,28 +15,38 @@ struct Args {
     key: Option<String>,
 }
 
+impl Args {
+    #[must_use]
+    pub fn hex_key(&self) -> String {
+        self.key.clone().unwrap_or_else(|| {
+            prompt_password("Decryption key: ").unwrap_or_else(|error| {
+                error!("{error}");
+                exit(1)
+            })
+        })
+    }
+
+    #[must_use]
+    pub fn key(&self) -> Vec<u8> {
+        hex::decode(self.hex_key()).unwrap_or_else(|error| {
+            error!("{error}");
+            exit(2);
+        })
+    }
+}
+
 fn main() {
     env_logger::init();
 
     let args = Args::parse();
     let encrypted_log = EncryptedLog::new(args.logfile.to_string());
-    let key = hex::decode(args.key.unwrap_or_else(|| {
-        prompt_password("Decryption key: ").unwrap_or_else(|error| {
-            error!("{error}");
-            exit(1)
-        })
-    }))
-    .unwrap_or_else(|error| {
-        error!("{error}");
-        exit(2);
-    });
 
-    for block in encrypted_log.decrypt(generic_array_try_from_slice(key.as_slice()).unwrap_or_else(
-        || {
+    for block in encrypted_log.decrypt(
+        generic_array_try_from_slice(args.key().as_slice()).unwrap_or_else(|| {
             error!("Invalid key size.");
             exit(3);
-        },
-    )) {
+        }),
+    ) {
         match block {
             Ok(ref bytes) => stdout().write_all(bytes).expect("could not write bytes"),
             Err(error) => error!("{error}"),
