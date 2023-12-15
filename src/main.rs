@@ -1,7 +1,6 @@
 use clap::Parser;
 use clap_stdin::FileOrStdin;
-use generic_array::{ArrayLength, GenericArray};
-use ios_log_decrypt::EncryptedLog;
+use ios_log_decrypt::{generic_array_try_from_slice, EncryptedLog};
 use log::error;
 use rpassword::prompt_password;
 use std::io::{stdout, Write};
@@ -51,17 +50,5 @@ fn main() {
             Ok(ref bytes) => stdout().write_all(bytes).expect("could not write bytes"),
             Err(error) => error!("{error}"),
         }
-    }
-}
-
-/// Convert slices to `GenericArray`s without panicking.
-fn generic_array_try_from_slice<T, N>(data: &[T]) -> Option<&GenericArray<T, N>>
-where
-    N: ArrayLength<T>,
-{
-    if data.len() == N::to_usize() {
-        Some(data.into())
-    } else {
-        None
     }
 }
