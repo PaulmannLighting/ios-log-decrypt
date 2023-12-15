@@ -2,11 +2,11 @@ mod block;
 
 use block::Block;
 use chacha20poly1305::{ChaCha20Poly1305, Key, KeyInit};
-use hex::{FromHex, FromHexError};
+use hex::FromHex;
 use std::iter::Map;
 use std::str::SplitWhitespace;
 
-type Blocks<'a> = Map<SplitWhitespace<'a>, fn(&str) -> Result<Block, FromHexError>>;
+type Blocks<'a> = Map<SplitWhitespace<'a>, fn(&str) -> Result<Block, anyhow::Error>>;
 
 pub struct ChaChaHexStream<'a> {
     blocks: Blocks<'a>,
