@@ -6,7 +6,7 @@ use hex::FromHex;
 use std::iter::Map;
 use std::str::SplitWhitespace;
 
-type Blocks<'a> = Map<SplitWhitespace<'a>, fn(&str) -> Result<Block, anyhow::Error>>;
+type Blocks<'a> = Map<SplitWhitespace<'a>, fn(&'a str) -> Result<Block, anyhow::Error>>;
 
 pub struct ChaChaHexStream<'a> {
     blocks: Blocks<'a>,
@@ -17,9 +17,7 @@ impl<'a> ChaChaHexStream<'a> {
     #[must_use]
     pub fn new(blocks: &'a str, key: &Key) -> Self {
         Self {
-            blocks: blocks
-                .split_whitespace()
-                .map(|block| Block::from_hex(block)),
+            blocks: blocks.split_whitespace().map(Block::from_hex),
             cipher: ChaCha20Poly1305::new(key),
         }
     }
