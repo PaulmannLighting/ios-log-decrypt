@@ -26,7 +26,7 @@ impl Args {
     }
 
     #[must_use]
-    fn key(&self) -> Vec<u8> {
+    pub fn key(&self) -> Vec<u8> {
         hex::decode(self.hex_key()).unwrap_or_else(|error| {
             error!("{error}");
             exit(2);
