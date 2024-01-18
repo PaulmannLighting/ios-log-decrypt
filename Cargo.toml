@@ -14,9 +14,9 @@ edition = "2021"
 anyhow = "1.0.75"
 chacha20poly1305 = { version = "0.10.1", features = ["std"] }
 clap = { version = "4.4.10", features = ["derive"] }
-clap-stdin = "0.2.1"
+clap-stdin = "0.4.0"
 env_logger = "0.10.1"
 hex = "0.4.3"
 log = "0.4.20"
 rpassword = "7.3.1"
-generic-array = "0.14.7"
+generic-array = "1.0.0"
