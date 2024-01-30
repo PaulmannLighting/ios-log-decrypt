@@ -3,7 +3,7 @@ use clap_stdin::FileOrStdin;
 use ios_log_decrypt::EncryptedLog;
 use log::error;
 use rpassword::prompt_password;
-use std::io::{stdout, Write};
+use std::io::{stdout, BufWriter, Write};
 use std::process::exit;
 
 #[derive(Debug, Parser)]
@@ -44,10 +44,14 @@ fn main() {
             exit(3)
         }));
 
+    let mut out = BufWriter::new(stdout().lock());
+
     for block in encrypted_log.decrypt(args.key().as_slice().into()) {
         match block {
-            Ok(ref bytes) => stdout().write_all(bytes).expect("could not write bytes"),
+            Ok(ref bytes) => out.write_all(bytes).expect("could not write bytes"),
             Err(error) => error!("{error}"),
         }
     }
+
+    out.flush().expect("could not flush STDOUT");
 }
