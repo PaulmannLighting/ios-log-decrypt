@@ -23,7 +23,14 @@ impl FromHex for Block {
     where
         T: AsRef<[u8]>,
     {
-        let bytes = Vec::<u8>::from_hex(hex)?;
+        Self::try_from(Vec::<u8>::from_hex(hex)?)
+    }
+}
+
+impl TryFrom<Vec<u8>> for Block {
+    type Error = anyhow::Error;
+
+    fn try_from(bytes: Vec<u8>) -> Result<Self, Self::Error> {
         Ok(Self {
             nonce: bytes
                 .get(0..NONCE_SIZE)
