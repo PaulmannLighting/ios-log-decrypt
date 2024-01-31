@@ -5,7 +5,7 @@ license = "MIT"
 repository = "https://github.com/PaulmannLighting/ios-log-decrypt"
 keywords = ["iOS", "log", "decrypt"]
 categories = ["command-line-utilities"]
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -14,9 +14,6 @@ edition = "2021"
 anyhow = "1.0.75"
 chacha20poly1305 = { version = "0.10.1", features = ["std"] }
 clap = { version = "4.4.10", features = ["derive"] }
-clap-stdin = "0.4.0"
-env_logger = "0.10.1"
 hex = "0.4.3"
 log = "0.4.20"
-rpassword = "7.3.1"
 generic-array = "1.0.0"
