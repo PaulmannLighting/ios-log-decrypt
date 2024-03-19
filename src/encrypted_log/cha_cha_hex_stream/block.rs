@@ -4,15 +4,15 @@ use hex::FromHex;
 
 const NONCE_SIZE: usize = 12;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Block {
     nonce: [u8; NONCE_SIZE],
-    ciphertext: Vec<u8>,
+    ciphertext: Box<[u8]>,
 }
 
 impl Block {
     pub fn decrypt(&self, cipher: &ChaCha20Poly1305) -> anyhow::Result<Vec<u8>> {
-        Ok(cipher.decrypt(self.nonce.as_slice().into(), self.ciphertext.as_slice())?)
+        Ok(cipher.decrypt(self.nonce.as_slice().into(), self.ciphertext.as_ref())?)
     }
 }
 
